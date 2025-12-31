@@ -1,0 +1,235 @@
+# Pattern Gym + Interview Reality Simulator
+
+Problem Statement
+
+Build an AI-powered professional Pattern Gym + Interview Reality Simulator website with a calm, good design that embodies the Babua philosophy
+
+Most learning platforms overload students with content, courses, and certificates, yet fail to build interview-ready engineers. Students don’t struggle due to lack of resources, but due to lack of structured pattern thinking, real interview exposure, and feedback on how they think under pressure. 
+Build a Babua-style learning system that treats engineering skills like a gym — where learners train core problem-solving patterns (notes , video , editorials , tips ) for free and validate them through realistic interview simulations(record their interview and based on solution they submitted and video of interview AI will be anlyszed candidate and suggest improvments).
+The platform removes courses, paywalls, and certificates, and instead focuses on pattern mastery, deliberate practice, and interview realism, while sustaining itself through optional, student-friendly value services like mock interviews, feedback, and mentorship.
+
+✅ What We Believe
+Patterns > Topics
+Thinking > Watching
+Reality > Theory
+Feedback > Completion
+Calm UI > Feature overload
+“Babua engineers don’t need motivation. They need clarity.”:
+
+## Features
+---
+
+🏋️ MODULE 1: Pattern Gym
+What It Is
+
+A training ground where students practice engineering patterns, not random questions.
+Pattern Structure (DSA / System Design / LLD)
+Each Pattern Page contains:
+Pattern Intuition (5–7 min read)
+Why this pattern exists
+When interviewers expect it
+Canonical Problems
+3–5 must-solve problems
+Failure Patterns
+Common wrong approaches
+Mental Checklist
+“If you see X, think Y”
+Self-Evaluation
+❌ I’m guessing
+⚠️ I know partially
+✅ I can explain clearly
+📌 No video paywall. Everything free.
+
+Pattern Gym Features
+Pattern-wise progress (not question count)
+Weak pattern highlighting
+Spaced revision reminders
+Calm, distraction-free interface
+🎯 MODULE 2: Interview Reality Simulator (IRS)
+What It Is
+A realistic interview environment, not mock tests.
+Interview Types
+DSA Round (40 min)
+LLD Round (Design & class modeling)
+System Design Round (Open-ended)
+Free Experience
+Past real interview scenarios
+Expected thinking paths
+Common interviewer follow-ups
+Time-boxed environment
+Paid (Optional)
+Live interviewer
+Recorded feedback
+Thinking timeline (“you panicked here”)
+Resume to-interview gap analysis
+
+4️⃣ User Flow (Simple, Calm, Non-Messy)
+🧭First-Time User Flow
+Landing Page
+   ↓
+"Start Training" (No signup wall)
+   ↓
+Choose Goal
+(DSA / System Design / Interview Prep)
+   ↓
+Choose Comfort Level
+(Beginner / Intermediate / Advanced)
+   ↓
+Pattern Gym Dashboard
+
+🧠 Daily User Flow
+Open App
+   ↓
+Today's Focus (1 Pattern + 1 Interview Drill)
+   ↓
+Practice
+   ↓
+Self-evaluate
+   ↓
+Optional: Book Interview / Review Weakness
+
+5️⃣ Pages & Features (Website Map)
+1️⃣ Landing Page
+Goal: Trust + clarity
+Sections:
+One-line philosophy
+“How this is different from courses”
+Pattern → Practice → Interview loop
+CTA: Start Training (Free)
+2️⃣ Onboarding Page
+Minimal, 3 questions:
+Target role (Intern / SDE / Backend)
+Current comfort level
+Available daily time
+📌 No email mandatory at start.
+
+3️⃣ Pattern Gym Dashboard
+
+
+Today’s pattern
+Weak patterns
+Revision due
+Calm layout (no charts overload)
+
+4️⃣ Pattern Detail Page
+
+
+Pattern explanation
+Problems list
+Failure modes
+Self-check buttons
+
+5️⃣ Interview Simulator Page
+Choose interview type
+Code Editor
+Time-boxed session
+Whiteboard + notes
+Submit thinking summary
+6️⃣ Feedback Page (Post Interview)
+
+Timeline feedback
+Missed signals
+Pattern gaps
+Suggested gym drills
+7️⃣ Revenue Page (Soft, Honest)
+
+“Pay for feedback, not content”
+
+Transparent pricing
+
+Student-first tone
+
+6️⃣ Revenue Model (Ethical & Scalable)
+Feature	Price	Why Students Pay
+Live Mock Interview	₹149–199	Real feedback
+Interview Replay + Notes	₹49	Learning from mistakes
+Pattern Weakness Report	₹99	Clear improvement plan
+Mentor Office Hours	₹199/month	Direction, not content
+
+📌 Everything optional.
+
+
+## Tech Stack
+- Replit (Full-stack app + MERN)
+- REACT , ZUSTAND , NODE JS Express , MONGODB , 
+
+---
+
+## Target Users
+- Students
+
+- Developers preparing for interviews
+
+---
+
+## Goal
+. Dedicated IDE Component
+•	Multi-language code editor (13+ languages: JavaScript, Python, Java, C++, Go, Rust, etc.)
+•	Language selector with syntax highlighting
+•	Powered by Monaco Editor
+2. Video Recording
+•	Record yourself during interviews with camera + microphone
+•	Show/hide camera preview
+•	Download recordings for self-review
+•	Perfect for practicing explanation skills
+3. Drawing Tools
+•	Excalidraw whiteboard for system design diagrams
+•	Separate pseudocode tab for algorithm planning
+•	Export capabilities
+4. Interview Timer
+•	Countdown timer with play/pause controls
+•	Visual progress bar
+•	Color-coded warnings when time is running low
+•	Auto-submit option
+5. System Design Multi-Step Workflow
+•	Step 1: Problem statement presentation
+•	Step 2: User asks clarifying questions (with guidance)
+•	Step 3: Detailed requirements provided
+•	Step 4: Design phase with timer, whiteboard, and video recording
+•	AI Analysis: Mock AI feedback simulation
+6. Enhanced Problem Solving
+•	New /solve/:patternId/:problemId route for dedicated problem-solving
+•	Code editor + whiteboard in tabs
+•	Video recording while coding
+•	Pattern reminder and mental checklist
+7. Dual Feedback System
+•	AI-generated analysis for free users
+•	Mentor review pathway for paid users
+•	Different feedback for System Design vs DSA/LLD
+•	Upgrade CTA to encourage paid services
+All features maintain the "Babua philosophy" with a calm, minimal, professional design focused on pattern mastery rather than gamification. The free content remains accessible while creating clear pathways to paid mentor services.
+Camera Recording
+•	Added proper permission handling
+•	Shows error messages if camera is denied
+•	Toggle camera preview on/off
+•	Record and download interviews as video files
+2. 5 Theme Options
+•	Minimal Gray - Default clean theme
+•	Ocean Blue - Calming blue tones
+•	Forest Green - Easy on eyes
+•	Sunset Orange - Warm energetic theme
+•	Midnight Purple - Dark mode variant
+•	Theme selector added to Dashboard and all problem-solving pages
+•	Themes persist across sessions via localStorage
+3. Comprehensive Test Results & Scoring
+•	Runs 10 test cases with detailed feedback
+•	Shows overall score, test pass rate, and code quality
+•	Displays time & space complexity analysis
+•	Lists strengths and improvement areas
+•	Visual indicators for pass/fail test cases
+•	Execution time for each test case
+4. Email Functionality for Paid Users
+•	Email results button (only for paid users)
+•	Download report option
+•	Upgrade prompt for free users
+•	Mock implementation ready for backend integration
+5. Maximize/Minimize Windows
+•	Both Code Editor and Whiteboard can be maximized to fullscreen
+•	Clean toggle between normal and fullscreen view
+•	Smooth transitions
+6. Stable Whiteboard
+•	Replaced problematic Excalidraw with HTML5 Canvas
+•	Draw, erase, and clear functions
+•	Pseudocode tab for structured notes
+•	No more errors or infinite loops!
+
