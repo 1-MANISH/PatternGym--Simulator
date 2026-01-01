@@ -44,12 +44,42 @@ export async function registerRoutes(
   });
 
   app.post(api.problems.submit.path, async (req, res) => {
-    // Mock submission handling
-    const result = {
-      status: Math.random() > 0.5 ? "passed" as const : "failed" as const,
-      feedback: "Great attempt! Watch out for edge cases with empty arrays.",
-    };
-    res.json(result);
+    const problem = await storage.getProblem(Number(req.params.id));
+    if (!problem) return res.status(404).json({ message: "Problem not found" });
+
+    // Mock test case execution
+    const testCases = (problem.testCases as any[]) || [];
+    // Ensure we have at least 5 test cases for the UI
+    const mockCases = testCases.length >= 5 ? testCases : [
+      ...testCases,
+      ...Array(Math.max(0, 5 - testCases.length)).fill(null).map((_, i) => ({
+        input: `Case ${i + 1}`,
+        output: "Success"
+      }))
+    ];
+
+    const testResults = mockCases.map((tc, i) => {
+      // Simulate some failures for variety if status isn't forced
+      const passed = Math.random() > 0.1;
+      return {
+        input: tc ? String(tc.input) : `Case ${i+1}`,
+        expected: tc ? String(tc.output) : "Success",
+        actual: passed ? (tc ? String(tc.output) : "Success") : "Error: Expected " + (tc ? tc.output : "Success"),
+        passed,
+      };
+    });
+
+    const passedCount = testResults.filter(r => r.passed).length;
+    const score = (passedCount / testResults.length) * 100;
+
+    res.json({
+      status: passedCount === testResults.length ? "passed" : "failed",
+      score,
+      testResults,
+      feedback: passedCount === testResults.length 
+        ? "Excellent pattern recognition! Your solution is optimal and handles all edge cases."
+        : `You're close! Your solution passed ${passedCount} out of ${testResults.length} cases. Consider the boundary conditions.`,
+    });
   });
 
   // Interviews

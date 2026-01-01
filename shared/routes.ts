@@ -61,6 +61,13 @@ export const api = {
       responses: {
         200: z.object({
           status: z.enum(['passed', 'failed']),
+          score: z.number(),
+          testResults: z.array(z.object({
+            input: z.string(),
+            expected: z.string(),
+            actual: z.string(),
+            passed: z.boolean(),
+          })),
           feedback: z.string(),
         }),
       },
