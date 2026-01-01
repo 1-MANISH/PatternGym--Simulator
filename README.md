@@ -30,6 +30,11 @@ Most learning platforms focus on content consumption.
 
 ---
 
+## Figma Design -
+
+- Phase 1
+[Initial Design](https://www.figma.com/make/w8b5R9tWfrlqk5SnmiDCqc/Website-for-Babua-Learning-Platform?t=lLov5NJdHNpYORxC-1)
+
 ## 📁 Project Structure
 
 ```
