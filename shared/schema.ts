@@ -26,8 +26,11 @@ export const problems = pgTable("problems", {
   title: text("title").notNull(),
   description: text("description").notNull(),
   difficulty: text("difficulty").notNull(),
-  starterCode: text("starter_code"),
+  starterCode: jsonb("starter_code"), // { javascript: string, python: string, ... }
   testCases: jsonb("test_cases"), // Array of {input, output}
+  expectedTimeComplexity: text("expected_time_complexity"),
+  expectedSpaceComplexity: text("expected_space_complexity"),
+  edgeCases: jsonb("edge_cases"), // Array of string
 });
 
 // User Submissions / Progress

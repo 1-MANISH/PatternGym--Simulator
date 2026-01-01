@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
+import Whiteboard, { WhiteboardRef } from "@/components/Whiteboard";
 
 const LANGUAGES = [
   { id: "javascript", name: "JavaScript", icon: "JS" },
@@ -33,6 +34,14 @@ const LANGUAGES = [
   { id: "java", name: "Java", icon: "JV" },
   { id: "go", name: "Go", icon: "GO" },
 ];
+
+const STARTER_CODES: Record<string, string> = {
+  javascript: "function solution(arr, target) {\n  // Implement your solution\n  return [];\n}",
+  python: "def solution(arr, target):\n    # Implement your solution\n    return []",
+  cpp: "#include <iostream>\n#include <vector>\nusing namespace std;\n\nclass Solution {\npublic:\n    vector<int> solution(vector<int>& arr, int target) {\n        return {};\n    }\n};",
+  java: "import java.util.*;\n\nclass Solution {\n    public int[] solution(int[] arr, int target) {\n        return new int[]{};\n    }\n}",
+  go: "package main\n\nfunc solution(arr []int, target int) []int {\n    return []int{}\n}"
+};
 
 export default function ProblemSolver() {
   const [, params] = useRoute("/problem/:id");
@@ -46,6 +55,8 @@ export default function ProblemSolver() {
   const [isEditorMaximized, setIsEditorMaximized] = useState(false);
   const [isNotesMaximized, setIsNotesMaximized] = useState(false);
   
+  const whiteboardRef = useRef<WhiteboardRef>(null);
+
   // Timer State
   const [time, setTime] = useState(0);
   const [isActive, setIsActive] = useState(false);
@@ -57,9 +68,10 @@ export default function ProblemSolver() {
 
   useEffect(() => {
     if (problem) {
-      setCode(problem.starterCode || "");
+      const customCodes = problem.starterCode as any;
+      setCode(customCodes?.[language] || STARTER_CODES[language] || "");
     }
-  }, [problem]);
+  }, [problem, language]);
 
   useEffect(() => {
     if (isActive) {
@@ -163,7 +175,7 @@ export default function ProblemSolver() {
 
       {/* Main Area */}
       <ResizablePanelGroup direction="horizontal" className="flex-1">
-        {/* Left Panel: Description & Excalidraw */}
+        {/* Left Panel: Description & Whiteboard */}
         {!isEditorMaximized && (
           <ResizablePanel defaultSize={40} minSize={20} className={cn(isNotesMaximized && "flex-[1_1_100%]")}>
             <div className="h-full flex flex-col border-r border-border">
@@ -204,9 +216,20 @@ export default function ProblemSolver() {
                     <div className="p-8 prose prose-sm dark:prose-invert max-w-none">
                       <p className="text-base leading-relaxed text-foreground/90">{problem.description}</p>
                       
+                      <div className="grid grid-cols-2 gap-4 mt-8 mb-8">
+                        <div className="bg-primary/5 p-4 rounded-2xl border border-primary/10">
+                          <span className="text-[10px] font-bold text-primary uppercase tracking-widest block mb-1">Time Complexity</span>
+                          <span className="text-sm font-mono font-bold">{problem.expectedTimeComplexity || "O(n)"}</span>
+                        </div>
+                        <div className="bg-primary/5 p-4 rounded-2xl border border-primary/10">
+                          <span className="text-[10px] font-bold text-primary uppercase tracking-widest block mb-1">Space Complexity</span>
+                          <span className="text-sm font-mono font-bold">{problem.expectedSpaceComplexity || "O(1)"}</span>
+                        </div>
+                      </div>
+
                       <h3 className="text-lg font-display mt-10 mb-4">Examples</h3>
                       <div className="not-prose space-y-6">
-                        {(problem.testCases as any[])?.slice(0, 2).map((tc, i) => (
+                        {(problem.testCases as any[])?.slice(0, 3).map((tc, i) => (
                           <div key={i} className="group relative">
                             <div className="absolute -left-4 top-0 bottom-0 w-1 bg-primary/20 rounded-full group-hover:bg-primary/40 transition-colors" />
                             <div className="bg-muted/40 p-5 rounded-2xl border border-border/50">
@@ -222,19 +245,21 @@ export default function ProblemSolver() {
                           </div>
                         ))}
                       </div>
+
+                      {problem.edgeCases && (
+                        <>
+                          <h3 className="text-lg font-display mt-10 mb-4">Edge Cases to Consider</h3>
+                          <ul className="list-disc pl-5 space-y-2 text-sm text-muted-foreground">
+                            {(problem.edgeCases as string[]).map((ec, i) => (
+                              <li key={i}>{ec}</li>
+                            ))}
+                          </ul>
+                        </>
+                      )}
                     </div>
                   </ScrollArea>
                 ) : (
-                  <div className="absolute inset-0 bg-muted/20 flex items-center justify-center flex-col gap-4">
-                    {/* Placeholder for real Excalidraw integration */}
-                    <div className="w-24 h-24 rounded-3xl bg-primary/10 flex items-center justify-center">
-                      <Monitor className="w-10 h-10 text-primary" />
-                    </div>
-                    <p className="text-sm text-muted-foreground max-w-[200px] text-center">
-                      Interactive Whiteboard for Algorithm Planning
-                    </p>
-                    <Button variant="outline" size="sm" className="rounded-full">Launch Workspace</Button>
-                  </div>
+                  <Whiteboard ref={whiteboardRef} />
                 )}
               </div>
             </div>

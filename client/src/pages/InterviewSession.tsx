@@ -4,10 +4,13 @@ import Webcam from "react-webcam";
 import Editor from "@monaco-editor/react";
 import { useSubmitInterview, useAnalyzeInterview } from "@/hooks/use-interviews";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Mic, MicOff, Video, VideoOff, PhoneOff, Timer } from "lucide-react";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import Whiteboard, { WhiteboardRef } from "@/components/Whiteboard";
+import { toast } from "@/hooks/use-toast";
 
 export default function InterviewSession() {
   const [, params] = useRoute("/interview/session/:id");
@@ -21,6 +24,10 @@ export default function InterviewSession() {
   const [camOn, setCamOn] = useState(true);
   const [timeLeft, setTimeLeft] = useState(45 * 60); // 45 mins
   const [step, setStep] = useState<"interview" | "analyzing">("interview");
+  
+  const [code, setCode] = useState("// Start coding here...");
+  const [notes, setNotes] = useState("");
+  const whiteboardRef = useRef<WhiteboardRef>(null);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -37,11 +44,20 @@ export default function InterviewSession() {
 
   const handleEndInterview = () => {
     setStep("analyzing");
-    endSession({ id }, {
+    const whiteboardData = whiteboardRef.current?.getDataUrl();
+    
+    endSession({ 
+      id,
+      code,
+      notes,
+      whiteboardData,
+      feedback: "User completed interview simulation." 
+    }, {
       onSuccess: () => {
         analyze(id, {
           onSuccess: () => {
-            navigate("/dashboard"); // Or a results page
+            toast({ title: "Interview Complete", description: "Analysis finished." });
+            navigate("/dashboard");
           }
         });
       }
@@ -84,20 +100,34 @@ export default function InterviewSession() {
       </div>
 
       <ResizablePanelGroup direction="horizontal" className="flex-1">
-        {/* Left: Code Editor */}
+        {/* Left: Editor & Whiteboard Tabs */}
         <ResizablePanel defaultSize={70}>
-          <Editor
-            height="100%"
-            defaultLanguage="javascript"
-            defaultValue="// Start coding here..."
-            theme="vs-dark"
-            options={{
-              fontSize: 14,
-              fontFamily: "'JetBrains Mono', monospace",
-              minimap: { enabled: false },
-              padding: { top: 20 }
-            }}
-          />
+          <Tabs defaultValue="editor" className="h-full flex flex-col">
+            <div className="px-4 bg-zinc-900 border-b border-white/5">
+              <TabsList className="bg-transparent border-none">
+                <TabsTrigger value="editor" className="data-[state=active]:bg-zinc-800">Editor</TabsTrigger>
+                <TabsTrigger value="whiteboard" className="data-[state=active]:bg-zinc-800">Whiteboard</TabsTrigger>
+              </TabsList>
+            </div>
+            <TabsContent value="editor" className="flex-1 m-0 p-0 overflow-hidden">
+              <Editor
+                height="100%"
+                defaultLanguage="javascript"
+                value={code}
+                theme="vs-dark"
+                onChange={(v) => setCode(v || "")}
+                options={{
+                  fontSize: 14,
+                  fontFamily: "'JetBrains Mono', monospace",
+                  minimap: { enabled: false },
+                  padding: { top: 20 }
+                }}
+              />
+            </TabsContent>
+            <TabsContent value="whiteboard" className="flex-1 m-0 p-0 overflow-hidden bg-white">
+              <Whiteboard ref={whiteboardRef} />
+            </TabsContent>
+          </Tabs>
         </ResizablePanel>
 
         <ResizableHandle className="bg-zinc-800" />
@@ -138,20 +168,31 @@ export default function InterviewSession() {
               </div>
             </div>
 
-            {/* Problem / Notes Area */}
-            <div className="flex-1 p-6">
-              <h3 className="font-bold text-lg mb-4 text-white">Interviewer Prompt</h3>
-              <div className="prose prose-invert prose-sm">
-                <p>
-                  Design a rate limiter that allows a maximum of N requests per minute for a given user ID. 
-                  Discuss the tradeoffs between different algorithms (Token Bucket, Leaky Bucket, Sliding Window).
-                </p>
-                <ul>
-                  <li>Scalability needs?</li>
-                  <li>Distributed environment?</li>
-                  <li>Storage requirements?</li>
-                </ul>
-              </div>
+            {/* Prompt / Notes Tabs */}
+            <div className="flex-1 flex flex-col overflow-hidden">
+              <Tabs defaultValue="prompt" className="flex-1 flex flex-col">
+                <TabsList className="bg-transparent border-b border-white/5 rounded-none px-4">
+                  <TabsTrigger value="prompt">Prompt</TabsTrigger>
+                  <TabsTrigger value="notes">Notes</TabsTrigger>
+                </TabsList>
+                <TabsContent value="prompt" className="flex-1 p-6 overflow-auto">
+                  <h3 className="font-bold text-lg mb-4 text-white">Interviewer Prompt</h3>
+                  <div className="prose prose-invert prose-sm">
+                    <p>
+                      Design a rate limiter that allows a maximum of N requests per minute for a given user ID. 
+                      Discuss the tradeoffs between different algorithms (Token Bucket, Leaky Bucket, Sliding Window).
+                    </p>
+                  </div>
+                </TabsContent>
+                <TabsContent value="notes" className="flex-1 p-4">
+                  <Textarea 
+                    className="h-full bg-zinc-800 border-zinc-700 text-white resize-none"
+                    placeholder="Capture your thoughts here..."
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                  />
+                </TabsContent>
+              </Tabs>
             </div>
           </div>
         </ResizablePanel>

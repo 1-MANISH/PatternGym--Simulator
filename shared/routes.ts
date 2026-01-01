@@ -90,6 +90,9 @@ export const api = {
       input: z.object({
         feedback: z.string().optional(), // Self reflection or notes
         recordingUrl: z.string().optional(),
+        code: z.string().optional(),
+        whiteboardData: z.string().optional(),
+        notes: z.string().optional(),
       }),
       responses: {
         200: z.custom<typeof interviews.$inferSelect>(),
