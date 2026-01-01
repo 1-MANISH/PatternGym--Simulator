@@ -26,7 +26,7 @@ function ProtectedRoute({ component: Component, ...rest }: any) {
   }
 
   if (!user) {
-    setLocation("/"); // Redirect to landing if not logged in
+    window.location.href = "/api/login"; // Redirect to Replit login
     return null;
   }
 
@@ -42,15 +42,9 @@ function Router() {
         <Route path="/dashboard">
           {() => <ProtectedRoute component={Dashboard} />}
         </Route>
-        <Route path="/gym">
-          {() => <ProtectedRoute component={Gym} />}
-        </Route>
-        <Route path="/gym/pattern/:id">
-          {() => <ProtectedRoute component={PatternDetail} />}
-        </Route>
-        <Route path="/problem/:id">
-          {() => <ProtectedRoute component={ProblemSolver} />}
-        </Route>
+        <Route path="/gym" component={Gym} />
+        <Route path="/gym/pattern/:id" component={PatternDetail} />
+        <Route path="/problem/:id" component={ProblemSolver} />
         <Route path="/interview">
           {() => <ProtectedRoute component={Interview} />}
         </Route>
