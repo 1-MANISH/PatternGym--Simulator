@@ -40,7 +40,7 @@ Most learning platforms focus on content consumption.
 ## Live Site - 
  - Phase 1
 
- [PatternGym](https://interview-reality-simulator--hardikpatidar64.replit.app)
+ [PatternGym](https://3f8ac736-e616-4a95-abab-69c449ff7b9b-00-2xo0ose2vty22.picard.replit.dev)
 
 ## 📁 Project Structure
 
